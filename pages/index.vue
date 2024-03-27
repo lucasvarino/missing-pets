@@ -19,35 +19,19 @@
       </div>
       <div class="flex justify-around flex-wrap">
         <card
-          title="Pandora"
-          description="A golden retriever lost in Central Park"
+          v-for="pet in pets"
+          :key="pet.id"
+          v-bind="pet"
+          :title="pet.breed"
+          :description="pet.additional_info"
           location="Central Park"
-          image="https://source.unsplash.com/random/?Dog&1"
-          type="Dog"
-          class="mt-6"
-        />
-        <card
-          title="Pandora"
-          description="A golden retriever lost in Central Park"
-          location="Central Park"
-          image="https://source.unsplash.com/random/?Dog&2"
-          type="Dog"
-          class="mt-6"
-        />
-        <card
-          title="Pandora"
-          description="A golden retriever lost in Central Park"
-          location="Central Park"
-          image="https://source.unsplash.com/random/?Dog&3"
-          type="Dog"
-          class="mt-6"
-        />
-        <card
-          title="Pandora"
-          description="A golden retriever lost in Central Park"
-          location="Central Park"
-          image="https://images.unsplash.com/photo-1591160690555-5debfba289f0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Z29sZGVuJTIwcmV0cmlldmVyfGVufDB8fDB8fHww"
-          type="Dog"
+          :image="
+            'https://source.unsplash.com/random/470x380/?' +
+            pet.type +
+            '&' +
+            pet.id
+          "
+          :type="pet.type"
           class="mt-6"
         />
       </div>
@@ -73,8 +57,9 @@ import FooterMissing from "~/components/FooterMissing.vue";
 import { onMounted, ref } from "vue";
 
 interface Pet {
-  title: string;
-  description: string;
+  id: number;
+  breed: string;
+  additional_info: string;
   location: string;
   image: string;
   type: string;
@@ -97,7 +82,9 @@ const fetchPets = async (page: number) => {
     },
   }).then((response) => {
     response.json().then((data: PetResponse) => {
-      pets.value = data.data;
+      pets.value = data.data.map((pet) => {
+        return { ...pet, type: pet.id % 2 === 0 ? "Dog" : "Cat" };
+      });
       totalPets.value = data.total;
     });
   });
