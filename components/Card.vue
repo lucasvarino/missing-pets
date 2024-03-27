@@ -4,7 +4,7 @@
     data-v0-t="card"
   >
     <div class="p-0">
-      <img :src="props.image" width="400" height="250" alt="Pet" class="" />
+      <NuxtImg :src="props.image" width="400" height="250" alt="Pet" class="" />
     </div>
     <div class="p-4">
       <div class="flex items-center space-x-4">
